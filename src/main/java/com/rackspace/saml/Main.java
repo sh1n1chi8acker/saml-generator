@@ -33,6 +33,7 @@ public class Main {
             options.addOption("email", true, "Email associated with the subject");
             options.addOption("domain", true, "Domain attribute");
 			options.addOption("roles", true, "Comma separated list of roles");
+			options.addOption("attributes", true, "Comma separated list of key value pair(key=value)");
 			options.addOption("publicKey", true, "Location of public key to decrypt assertion");
 			options.addOption("privateKey", true, "Location or private key use to sign assertion");
 			options.addOption("samlAssertionExpirationDays", true, "How long before assertion is no longer valid. Can be negative.");
@@ -59,7 +60,13 @@ public class Main {
 			if (cmd.getOptionValue("roles") != null)
 				attributes.put("roles", Arrays.asList(cmd.getOptionValue("roles").split(",")));
 
-            if (cmd.getOptionValue("email") != null)
+			if (cmd.getOptionValue("attributes") != null) {
+				for (String attr : cmd.getOptionValue("attributes").split(",")) {
+					attributes.put(attr.split("=")[0], Arrays.asList(attr.split("=")[1]));
+				}
+			}
+
+			if (cmd.getOptionValue("email") != null)
                 attributes.put("email", Arrays.asList(cmd.getOptionValue("email")));
 
 			SamlAssertionProducer producer = new SamlAssertionProducer();
